@@ -1,12 +1,17 @@
-import React from "react";
 import Image from "next/image";
 import {
   MenuIcon,
   SearchIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/outline";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { selectItems } from "@/slices/basketSlice";
 
 function Header() {
+  const router = useRouter();
+  const items = useSelector(selectItems);
   return (
     <header>
       <div className="flex items-center bg-amazon_blue p-1 flex-grow py-1">
@@ -17,6 +22,7 @@ function Header() {
             height={30}
             objectFit="contain"
             className="cursor-pointer"
+            onClick={() => router.push("/")}
           />
         </div>
         <div className="bg-yellow-400 hover:bg-yellow-500 hidden sm:flex items-center rounded-md flex-grow cursor-pointer h-10">
@@ -27,17 +33,20 @@ function Header() {
           <SearchIcon className="h-12 p-4" />
         </div>
         <div className="text-white flex items-center text-sm space-x-6 mx-6 whitespace-nowrap">
-          <div className="link">
-            <p>Hello, Karan Jain</p>
+          <div onClick={signIn} className="link cursor-pointer">
+            <p className="hover:underline">Hello</p>
             <p className="font-bold md:text-sm">Account & Lists</p>
           </div>
           <div className="link">
             <p>Retuerns</p>
             <p className="font-bold md:text-sm"> & Orders</p>
           </div>
-          <div className=" relative link flex items-center">
-            <span className="absolute top-0 right-0 md:right-10 bg-yellow-400 text-black h-4 w-4 text-center rounded-full font-bold">
-              0
+          <div
+            onClick={() => router.push("/checkout")}
+            className="relative flex items-center cursor-pointer link"
+          >
+            <span className="absolute top-0 right-0 md:right-10 bg-yellow-400 text-black w-4 m-0 p-0 h-4 text-center rounded-full font-bold">
+              {items.length}
             </span>
             <ShoppingCartIcon className="h-10" />
             <p className="font-bold md:text-sm hidden md:inline mt-2">Basket</p>
