@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { selectItems } from "@/slices/basketSlice";
 
 function Header() {
+  const { data: session } = useSession();
   const router = useRouter();
   const items = useSelector(selectItems);
   return (
@@ -33,8 +34,13 @@ function Header() {
           <SearchIcon className="h-12 p-4" />
         </div>
         <div className="text-white flex items-center text-sm space-x-6 mx-6 whitespace-nowrap">
-          <div onClick={signIn} className="link cursor-pointer">
-            <p className="hover:underline">Hello</p>
+          <div
+            onClick={!session ? signIn : signOut}
+            className="link cursor-pointer"
+          >
+            <p className="hover:underline">
+              {session ? `Hello, ${session.user.name}` : "signin"}
+            </p>
             <p className="font-bold md:text-sm">Account & Lists</p>
           </div>
           <div className="link">
